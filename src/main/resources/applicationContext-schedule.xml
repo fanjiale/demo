@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans default-lazy-init="true"
+       xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="scheduleTaskMonitorService" class="com.cares.service.impl.ScheduleTaskMonitorServiceImpl"/>
+
+    <bean id="monitorTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <ref bean="scheduleTaskMonitorService"/>
+        </property>
+        <property name="targetMethod">
+            <value>monitorTask</value>
+        </property>
+        <property name="concurrent" value="false"/>
+    </bean>
+    <bean id="monitorTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail">
+            <ref bean="monitorTask"/>
+        </property>
+        <property name="cronExpression">
+            <value>0/10 * * * * ?</value>
+        </property>
+    </bean>
+
+    <bean id="syncWeiboQuertz" lazy-init="false" autowire="no"
+          class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+                <!-- 系统监控任务 -->
+                <ref bean="monitorTaskTrigger"/>
+            </list>
+        </property>
+    </bean>
+
+</beans>
