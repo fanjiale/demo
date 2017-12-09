@@ -124,6 +124,12 @@
         </dependency>
 
         <dependency>
+            <groupId>oracle</groupId>
+            <artifactId>oraclejdbcdriver</artifactId>
+            <version>ojdbc6</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
             <version>1.0.18</version>
